@@ -60,7 +60,7 @@ let createProduct = () => {
     // Ajout d'un produit dans le localStorage
     let addProductLocalStorage = () => {
         saveProductLocalStorage.push(productJson);
-        let productLinea = JSON.stringify(productJson);
+        let productLinea = JSON.stringify(saveProductLocalStorage);
         localStorage.setItem('product', productLinea)
     }
 
@@ -96,12 +96,12 @@ let createProduct = () => {
         // Vérification si le produit avec la même couleur est déjà présent
         /*
         Erreur avec findIndex , revoir le type de saveProductLocalStorage
-        
+        Peut etre forcer le type array à voir
         
         */
         else {
             const sameColorId = (s) => s.colors === productJson.colors && s._id === productJson._id;
-            let index = saveProductLocalStorage.findIndex(sameColorId);
+            let index = Array.from(saveProductLocalStorage).findIndex(sameColorId)
             // Si déjà présent on modifie la quantité
             if (index !== -1) {
                 modifyProductLocalStorage(index);
