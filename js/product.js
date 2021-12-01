@@ -50,7 +50,6 @@ let createProduct = () => {
     let quantity = document.getElementById("quantity");
     let colors = document.getElementById("colors");
 
-    //let saveProductLocalStorage;
     let saveProductLocalStorage = JSON.parse(localStorage.getItem('product'));
 
     let productJson = {
@@ -58,7 +57,7 @@ let createProduct = () => {
         qty: quantity.value,
         colors: colors.value,
     }
-    
+
     // Ajout d'un produit dans le localStorage
     let addProductLocalStorage = () => {
         saveProductLocalStorage.push(productJson);
@@ -98,8 +97,8 @@ let createProduct = () => {
         }
 
         // Vérification si le produit avec la même couleur est déjà présent
-        else { 
-           const sameColorId = (s) => s.colors === productJson.colors && s._id === productJson._id;
+        else {
+            const sameColorId = (s) => s.colors === productJson.colors && s._id === productJson._id;
             let index = saveProductLocalStorage.findIndex(sameColorId)
 
             // Si déjà présent on modifie la quantité
