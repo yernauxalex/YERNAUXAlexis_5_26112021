@@ -1,3 +1,18 @@
+/*  If localStorage[inventory].length > 1 
+        on récupère l'inventaire dans le localstorage
+    else 
+        async getInventory () {
+            try {
+                localStorage[inventory] = await fetch ('url') 
+            }
+            catch (e){
+                console.error('')
+            }
+        }
+    
+        affichage de l'inventaire()
+*/ 
+
 
 fetch("http://localhost:3000/api/products")
     .then(function (response) {
@@ -6,11 +21,10 @@ fetch("http://localhost:3000/api/products")
         }
     })
     .then((data) => {
-        // Affiche tout les produits contenu dans l'API grâce à une boucle
+        // Affiche tout les produits contenu dans l'API grâce à forEach
         (function() {
             let items = document.getElementById("items");
-            //cf méthode foreach
-            for (let p in data) {
+            data.forEach((print, p) => {
                 items.innerHTML += `
                 <a href="./product.html?id=${data[p]._id}">
                     <article>
@@ -19,7 +33,7 @@ fetch("http://localhost:3000/api/products")
                     <p class="productDescription">${data[p].description}</p></>
                 </article>
             </a>`;
-            }
+            });
         })();
     })
     .catch(function (err) {
