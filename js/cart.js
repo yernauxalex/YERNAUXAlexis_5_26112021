@@ -29,7 +29,10 @@ fetch("http://localhost:3000/api/products")
                 let productObject = findObject(id);
                 let price = productObject.price * parseInt(productLocalStorage[i].qty);
                 
-                
+                // Stockage des id produits
+                let productsId = [productLocalStorage[i]._id];
+                products.push(productsId);
+
                 // Insertion dans la page 
                 let cart = document.getElementById("cart__items");
                 cart.innerHTML += `
@@ -56,7 +59,25 @@ fetch("http://localhost:3000/api/products")
                         </article>`
             }
         }
+
+        // Supprimer un produit 
+        let deleteProduct = () => {
+            
+        }
+
+        // Modifier la quantité d'un produit 
+        let modifyProduct = () => {
+
+        }
+
+        let totalcost = () => {
+
+        }
+
         showCart();
+        // deleteProduct();
+        // modifyProduct();
+        // totalcost();
     })
     .catch(function (err) {
         console.error("Erreur d'accès à l'API");
