@@ -113,8 +113,12 @@ let createProduct = () => {
         }
     }
     console.log("======");
-    console.log("Current localStorage");
+    console.log("Current saveProductLocalStorage");
     console.log(saveProductLocalStorage);
+    console.log("======");
+    console.log("======");
+    console.log("Current localStorage");
+    console.log(localStorage);
     console.log("======");
 }
 
