@@ -7,8 +7,9 @@ fetch("http://localhost:3000/api/products")
     })
     .then((data) => {
         // Affiche tout les produits contenu dans l'API grâce à une boucle
-        let displayAllProduct = () => {
+        (function() {
             let items = document.getElementById("items");
+            //cf méthode foreach
             for (let p in data) {
                 items.innerHTML += `
                 <a href="./product.html?id=${data[p]._id}">
@@ -19,8 +20,7 @@ fetch("http://localhost:3000/api/products")
                 </article>
             </a>`;
             }
-        }
-        displayAllProduct()
+        })();
     })
     .catch(function (err) {
         console.error("Erreur d'accès à l'API");
