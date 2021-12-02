@@ -67,7 +67,6 @@ let createProduct = () => {
 
     // Modifier un produit dans le localStorage
     let modifyProductLocalStorage = (index) => {
-        //erreur 
         saveProductLocalStorage[index].qty = parseInt(saveProductLocalStorage[index].qty);
         productJson.qty = parseInt(productJson.qty);
 
