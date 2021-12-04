@@ -2,6 +2,36 @@
 let idProduct = new URL(window.location.href).searchParams.get('id')
 console.log(idProduct);
 
+(async () => {
+    try {
+        if (!localStorage.getItem("inventory")){
+            console.log("Accès à l'api");
+            let response = await fetch ("http://localhost:3000/api/products");
+            let inventoryRaw = await response.json();
+            localStorage.setItem('inventory', JSON.stringify(inventoryRaw));
+        }
+        let data = await JSON.parse(localStorage.getItem("inventory"));
+        console.log(data);
+        (displayproduct = () => {
+            let product = data.find(data => data._id === idProduct);
+            //Insertion des éléments dans la page
+            let baliseImg = document.getElementsByClassName("item__img");
+            baliseImg[0].innerHTML = `<img src="${product.imageUrl}" alt="${product.altTxt}">`;
+            document.getElementById("title").innerHTML = product.name;
+            document.getElementById("price").innerHTML = product.price;
+            document.getElementById("description").innerHTML = product.description;
+            let selectColor = document.getElementById("colors");
+            let colors = product.colors;
+            colors.forEach((print, k) => {
+                selectColor.insertAdjacentHTML('beforeend', `<option value="${colors[k]}">${colors[k]}</option>`);
+            });
+        })();
+    }
+    catch (error){
+        console.error(error);
+    }
+})()
+/*
 fetch("http://localhost:3000/api/products")
     .then(function (response) {
         if (response.ok) {
@@ -42,7 +72,7 @@ fetch("http://localhost:3000/api/products")
     })
     .catch(function (err) {
         console.error("Erreur d'accès à l'API");
-    });
+    });*/
 
 // Gestion du localStorage
 // Création d'un produit
