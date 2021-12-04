@@ -24,8 +24,8 @@
             });
         })()
     }
-    catch (e){
-        console.error("Erreur d'accès à l'API");
+    catch (error){
+        console.error(error);
     }
 })()
 
