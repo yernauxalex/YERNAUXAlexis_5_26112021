@@ -4,6 +4,7 @@ console.log(idProduct);
 
 (async () => {
     try {
+        //On récupère les données de l'api pour les stocker dans le localStorage si elles n'y sont pas présentes
         if (!localStorage.getItem("inventory")){
             console.log("Accès à l'api");
             let response = await fetch ("http://localhost:3000/api/products");
