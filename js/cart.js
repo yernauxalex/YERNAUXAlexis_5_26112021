@@ -5,10 +5,10 @@
             console.log("Accès à l'api");
             let response = await fetch ("http://localhost:3000/api/products");
             let inventoryRaw = await response.json();
-            localStorage.setItem('inventory', JSON.stringify(inventoryRaw));
+            localStorage.setItem("inventory", JSON.stringify(inventoryRaw));
         }
         let data = await JSON.parse(localStorage.getItem("inventory"));
-        let productLocalStorage = JSON.parse(localStorage.getItem('product'));
+        let productLocalStorage = JSON.parse(localStorage.getItem("product"));
         console.log(productLocalStorage);  
 
         // Trouve l'objet correspondant à l'id dans le localStorage
@@ -38,7 +38,7 @@
                                 <div class="cart__item__content__description">
                                     <h2>${productObject.name}</h2>
                                     <p>${productLocalStorage[i].colors}</p>
-                                    <p>${price}€</p>
+                                    <p class="priceProduct">${price}€</p>
                                 </div>
                                 <div class="cart__item__content__settings">
                                     <div class="cart__item__content__settings__quantity">
@@ -58,8 +58,8 @@
         (deleteProduct = () => {
             let tempLocalStorage = productLocalStorage;
             // On stock les boutons supprimer dans un tableau
-            let deleteButton = [...document.querySelectorAll('.deleteItem')];
-			let deleteItem = [...document.querySelectorAll('.cart__item')];
+            let deleteButton = [...document.getElementsByClassName("deleteItem")];
+			let deleteItem = [...document.getElementsByClassName("cart__item")];
 			
             // On écoute chaque bouton supprimer
             deleteButton.forEach((item, i) => {
@@ -76,24 +76,47 @@
                     if (indexDom !== -1) {
                         // Suppression dans le localStorage
                         tempLocalStorage.splice(indexDom, 1);
-                        localStorage.setItem('product', JSON.stringify(tempLocalStorage));
+                        localStorage.setItem("product", JSON.stringify(tempLocalStorage));
                         // Suppression dans le DOM
                         deleteItem[i].remove();
-                        // Suppression de 'product' dans le localStorage s'il est vide
+                        // Suppression de "product" dans le localStorage s'il est vide
                         if (productLocalStorage == '') {
-                            localStorage.removeItem('product');
+                            localStorage.removeItem("product");
                             products = [];
                         }
                     }
                 })
             })
-        })()
+        })();
 
         // Modifier la quantité d'un produit
-        /*(modifyProduct = () => {
-
-        })()
-
+        (modifyProduct = () => {
+            // On stock les inputs à modifier
+            let inputContainer = [...document.getElementsByClassName("itemQuantity")];
+            // On écoute chaque champ input
+            inputContainer.forEach((item, i) => {
+                item.addEventListener("change", () => {
+                    console.log('écoute du bouton')
+                    // On modifie la quantité dans le localStorage et le DOM
+                    if (inputContainer[i].value > 100) {
+                        inputContainer[i].value = 100;
+                        console.log("Quantité maximale atteinte");
+                    }
+                    else {
+                        productLocalStorage[i].qty = inputContainer[i].value;
+                        localStorage.setItem("product", JSON.stringify(productLocalStorage));
+                    }
+                    // Calcul du nouveau prix
+                    (newPrice = () => {
+                        let priceProduct = document.getElementsByClassName("priceProduct");
+                        let myItem = findObject(productLocalStorage[i]._id);
+                        let price = myItem.price * parseInt(productLocalStorage[i].qty);
+                        priceProduct[i].innerHTML = `${price} €`;
+                    })()
+                })
+            })
+        })();
+        /*
         (totalcost = () => {
 
         })()*/
