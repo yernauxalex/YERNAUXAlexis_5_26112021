@@ -139,6 +139,83 @@
                 })
             })
         })();
+
+        // Gestion du formulaire de commande
+        addEventListener("change", () => {
+            let firstName = document.getElementById("firstName").value;
+            let lastName = document.getElementById("lastName").value;
+            let address = document.getElementById("address").value;
+            let city = document.getElementById("city").value;
+            let mail = document.getElementById("email").value;
+
+            (validFirstName = () => {
+                let textStatus = document.getElementById("firstNameErrorMsg");
+                // Regex
+                let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
+                let number = /^[a-zA-Z\-1-9]+$/;
+
+                if (firstName.match(pattern)) {
+					textStatus.innerHTML = "Prénom valide";
+					//textStatus.style.color = "#1bc41b";
+				} 
+                else {
+					if (firstName.match(number)) {
+						textStatus.innerHTML = "Les chiffres ne sont pas tolérés";
+						//textStatus.style.color = "#ff4a4a";
+					} 
+                    else {
+						textStatus.innerHTML = "Merci de renseigner un prénom valide";
+						//textStatus.style.color = "#ff4a4a";
+					}
+				}
+				if (firstName == "") {
+					textStatus.innerHTML = "";
+				}
+            })();
+
+            (validLastName = () => {
+                let textStatus = document.getElementById("lastNameErrorMsg");
+                // Regex
+                let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
+                let number = /^[a-zA-Z\-1-9]+$/;
+
+                if (lastName.match(pattern)) {
+					textStatus.innerHTML = "Nom valide";
+					textStatus.style.color = "#1bc41b";
+				} 
+                else {
+					if (lastName.match(number)) {
+						textStatus.innerHTML = "Les chiffres ne sont pas tolérés";
+						textStatus.style.color = "#ff4a4a";
+					} 
+                    else {
+						textStatus.innerHTML = "Merci de renseigner un nom valide";
+						textStatus.style.color = "#ff4a4a";
+					}
+				}
+				if (lastName == "") {
+					textStatus.innerHTML = "";
+				}
+            })();
+
+            (validAdress = () => {
+				let textStatus = document.getElementById("addressErrorMsg");
+                // Regex
+				let pattern = '([0-9a-zA-Z,. ]*) ?([0-9]{5}) ?([a-zA-Z]*)';
+
+				if (address.match(pattern)) {
+					textStatus.innerHTML = "Adresse postale valide";
+					textStatus.style.color = "#1bc41b";
+				} 
+                else {
+					textStatus.innerHTML = "Merci de renseigner une adresse valide";
+					textStatus.style.color = "#ff4a4a";
+				}
+				if (address == "") {
+					textStatus.innerHTML = "";
+				}
+            })();
+        })
     }
     catch (error){
         console.error(error);
