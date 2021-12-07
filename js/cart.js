@@ -54,6 +54,29 @@
             })
         })();
 
+        // Afficher le coût total et le nombre d'objet du panier
+        let totalcost = () => {
+            let sumProduct = 0;
+            let sumPrice = 0;
+            let totalQuantity = document.getElementById('totalQuantity');
+            let totalPrice = document.getElementById('totalPrice');
+
+            if (localStorage.getItem('product')) {
+                productLocalStorage.forEach((item, k) => {
+                    let myItemTotal = findObject(productLocalStorage[k]._id);
+
+                    let tempQuantity = parseInt(productLocalStorage[k].qty);
+                    sumProduct += tempQuantity;
+
+                    let tempPrice = parseInt(myItemTotal.price);
+                    sumPrice += tempPrice * tempQuantity;
+                })
+            }
+            totalQuantity.innerHTML = sumProduct;
+            totalPrice.innerHTML = sumPrice;
+        }
+        totalcost();
+
         // Supprimer un produit 
         (deleteProduct = () => {
             let tempLocalStorage = productLocalStorage;
@@ -69,10 +92,7 @@
                         k.colors === deleteItem[i].dataset.color &&
                         k._id === deleteItem[i].dataset.id
                     );
-                    console.log(deleteItem[i].dataset)
-                    console.log(deleteItem[i].dataset.color)
-                    console.log('Index dans le dom')
-                    console.log(indexDom)
+
                     if (indexDom !== -1) {
                         // Suppression dans le localStorage
                         tempLocalStorage.splice(indexDom, 1);
@@ -85,6 +105,7 @@
                             products = [];
                         }
                     }
+                    totalcost();
                 })
             })
         })();
@@ -96,7 +117,6 @@
             // On écoute chaque champ input
             inputContainer.forEach((item, i) => {
                 item.addEventListener("change", () => {
-                    console.log('écoute du bouton')
                     // On modifie la quantité dans le localStorage et le DOM
                     if (inputContainer[i].value > 100) {
                         inputContainer[i].value = 100;
@@ -113,13 +133,10 @@
                         let price = myItem.price * parseInt(productLocalStorage[i].qty);
                         priceProduct[i].innerHTML = `${price} €`;
                     })()
+                    totalcost();
                 })
             })
         })();
-        /*
-        (totalcost = () => {
-
-        })()*/
     }
     catch (error){
         console.error(error);
