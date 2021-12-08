@@ -148,6 +148,7 @@
             let city = document.getElementById("city").value;
             let mail = document.getElementById("email").value;
 
+            // Vérification de la validité du prénom
             (validFirstName = () => {
                 let textStatus = document.getElementById("firstNameErrorMsg");
                 // Regex
@@ -156,16 +157,17 @@
 
                 if (firstName.match(pattern)) {
 					textStatus.innerHTML = "Prénom valide";
-					//textStatus.style.color = "#1bc41b";
+					textStatus.style.color = "#1bc41b";
+                    let validFirstName = firstName;
 				} 
                 else {
 					if (firstName.match(number)) {
 						textStatus.innerHTML = "Les chiffres ne sont pas tolérés";
-						//textStatus.style.color = "#ff4a4a";
+						textStatus.style.color = "#ff4a4a";
 					} 
                     else {
 						textStatus.innerHTML = "Merci de renseigner un prénom valide";
-						//textStatus.style.color = "#ff4a4a";
+						textStatus.style.color = "#ff4a4a";
 					}
 				}
 				if (firstName == "") {
@@ -173,6 +175,7 @@
 				}
             })();
 
+            // Vérification de la validité du nom
             (validLastName = () => {
                 let textStatus = document.getElementById("lastNameErrorMsg");
                 // Regex
@@ -182,6 +185,7 @@
                 if (lastName.match(pattern)) {
 					textStatus.innerHTML = "Nom valide";
 					textStatus.style.color = "#1bc41b";
+                    let validLastName = lastName;
 				} 
                 else {
 					if (lastName.match(number)) {
@@ -198,14 +202,16 @@
 				}
             })();
 
+            // Vérification de la validité de l'adresse postale
             (validAdress = () => {
 				let textStatus = document.getElementById("addressErrorMsg");
                 // Regex
-				let pattern = '([0-9a-zA-Z,. ]*) ?([0-9]{5}) ?([a-zA-Z]*)';
+				let pattern = /^[#.0-9a-z\s,-]+$/i;
 
 				if (address.match(pattern)) {
 					textStatus.innerHTML = "Adresse postale valide";
 					textStatus.style.color = "#1bc41b";
+                    let validAdress = address;
 				} 
                 else {
 					textStatus.innerHTML = "Merci de renseigner une adresse valide";
@@ -215,6 +221,50 @@
 					textStatus.innerHTML = "";
 				}
             })();
+
+            // Vérification de la validité de la ville
+            (validCity = () => {
+                let textStatus = document.getElementById("cityErrorMsg");
+                // Regex
+                let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/i;
+                
+                if (city.match(pattern)) {
+                    textStatus.innerHTML = "Ville valide";
+                    textStatus.style.color = "#1bc41b";
+                    let validCity = city;
+                }
+                else {
+					textStatus.innerHTML = "Merci de renseigner une ville valide";
+					textStatus.style.color = "#ff4a4a";
+				}
+				if (city == "") {
+					textStatus.innerHTML = "";
+				}
+            })();
+
+            // Vérification de la validité de l'email
+            (validMail = () => {
+                let textStatus = document.getElementById("emailErrorMsg");
+                // Regex
+                let pattern = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i;
+
+                if (mail.match(pattern)) {
+                    textStatus.innerHTML = "Adresse email valide";
+                    textStatus.style.color = "#1bc41b";
+                    validMail = mail;
+                }
+                else {
+					textStatus.innerHTML = "Merci de renseigner une adresse email valide";
+					textStatus.style.color = "#ff4a4a";
+				}
+				if (mail == "") {
+					textStatus.innerHTML = "";
+				}
+            })();
+
+            // Création de l'objet contact dans le localStorage
+            let orderButton = document.getElementById("order");
+            orderButton.addEventListener("click", (e) => {e.preventDefault()});
         })
     }
     catch (error){
