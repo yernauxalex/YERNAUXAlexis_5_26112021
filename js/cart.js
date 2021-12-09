@@ -1,3 +1,4 @@
+//localStorage.removeItem('contact');
 (async () => {
     try{
         //On récupère les données de l'api pour les stocker dans le localStorage si elles n'y sont pas présentes    
@@ -9,7 +10,10 @@
         }
         let data = await JSON.parse(localStorage.getItem("inventory"));
         let productLocalStorage = JSON.parse(localStorage.getItem("product"));
+        let contactLocalStorage = JSON.parse(localStorage.getItem("contact"));
+
         console.log(productLocalStorage);  
+        console.log(contactLocalStorage);
 
         // Trouve l'objet correspondant à l'id dans le localStorage
         let findObject = id => {
@@ -24,7 +28,7 @@
                     let productObject = findObject(id);
                     let price = productObject.price * parseInt(productLocalStorage[i].qty);
                     
-                    // Stockage des id produits présent dans le panier
+                    // Stockage des id produits présent dans le panier pour la requête POST
                     let productsId = [productLocalStorage[i]._id];
                     products.push(productsId);
     
@@ -51,7 +55,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </article>`
+                            </article>`;
                 })
             }
         })();
@@ -73,9 +77,10 @@
                     let tempPrice = parseInt(myItemTotal.price);
                     sumPrice += tempPrice * tempQuantity;
                 })
+                totalQuantity.innerHTML = sumProduct;
+                totalPrice.innerHTML = sumPrice;
             }
-            totalQuantity.innerHTML = sumProduct;
-            totalPrice.innerHTML = sumPrice;
+            
         }
         totalcost();
 
@@ -142,11 +147,11 @@
 
         // Gestion du formulaire de commande
         addEventListener("change", () => {
-            let firstName = document.getElementById("firstName").value;
-            let lastName = document.getElementById("lastName").value;
-            let address = document.getElementById("address").value;
-            let city = document.getElementById("city").value;
-            let mail = document.getElementById("email").value;
+            let tempFirstName = document.getElementById("firstName").value;
+            let tempLastName = document.getElementById("lastName").value;
+            let tempAddress = document.getElementById("address").value;
+            let tempCity = document.getElementById("city").value;
+            let tempEmail = document.getElementById("email").value;
 
             // Vérification de la validité du prénom
             (validFirstName = () => {
@@ -155,13 +160,13 @@
                 let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
                 let number = /^[a-zA-Z\-1-9]+$/;
 
-                if (firstName.match(pattern)) {
+                if (tempFirstName.match(pattern)) {
 					textStatus.innerHTML = "Prénom valide";
-					textStatus.style.color = "#1bc41b";
-                    let validFirstName = firstName;
+					textStatus.style.color = "white";
+                    validFirstName = tempFirstName;
 				} 
                 else {
-					if (firstName.match(number)) {
+					if (tempFirstName.match(number)) {
 						textStatus.innerHTML = "Les chiffres ne sont pas tolérés";
 						textStatus.style.color = "#ff4a4a";
 					} 
@@ -170,7 +175,7 @@
 						textStatus.style.color = "#ff4a4a";
 					}
 				}
-				if (firstName == "") {
+				if (tempFirstName == "") {
 					textStatus.innerHTML = "";
 				}
             })();
@@ -182,13 +187,13 @@
                 let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
                 let number = /^[a-zA-Z\-1-9]+$/;
 
-                if (lastName.match(pattern)) {
+                if (tempLastName.match(pattern)) {
 					textStatus.innerHTML = "Nom valide";
-					textStatus.style.color = "#1bc41b";
-                    let validLastName = lastName;
+					textStatus.style.color = "white";
+                    validLastName = tempLastName;
 				} 
                 else {
-					if (lastName.match(number)) {
+					if (tempLastName.match(number)) {
 						textStatus.innerHTML = "Les chiffres ne sont pas tolérés";
 						textStatus.style.color = "#ff4a4a";
 					} 
@@ -197,27 +202,27 @@
 						textStatus.style.color = "#ff4a4a";
 					}
 				}
-				if (lastName == "") {
+				if (tempLastName == "") {
 					textStatus.innerHTML = "";
 				}
             })();
 
             // Vérification de la validité de l'adresse postale
-            (validAdress = () => {
+            (validAddress = () => {
 				let textStatus = document.getElementById("addressErrorMsg");
                 // Regex
 				let pattern = /^[#.0-9a-z\s,-]+$/i;
 
-				if (address.match(pattern)) {
+				if (tempAddress.match(pattern)) {
 					textStatus.innerHTML = "Adresse postale valide";
-					textStatus.style.color = "#1bc41b";
-                    let validAdress = address;
+					textStatus.style.color = "white";
+                    validAddress = tempAddress;
 				} 
                 else {
 					textStatus.innerHTML = "Merci de renseigner une adresse valide";
 					textStatus.style.color = "#ff4a4a";
 				}
-				if (address == "") {
+				if (tempAddress == "") {
 					textStatus.innerHTML = "";
 				}
             })();
@@ -228,16 +233,16 @@
                 // Regex
                 let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/i;
                 
-                if (city.match(pattern)) {
+                if (tempCity.match(pattern)) {
                     textStatus.innerHTML = "Ville valide";
-                    textStatus.style.color = "#1bc41b";
-                    let validCity = city;
+                    textStatus.style.color = "white";
+                    validCity = tempCity;
                 }
                 else {
 					textStatus.innerHTML = "Merci de renseigner une ville valide";
 					textStatus.style.color = "#ff4a4a";
 				}
-				if (city == "") {
+				if (tempCity == "") {
 					textStatus.innerHTML = "";
 				}
             })();
@@ -248,29 +253,90 @@
                 // Regex
                 let pattern = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i;
 
-                if (mail.match(pattern)) {
+                if (tempEmail.match(pattern)) {
                     textStatus.innerHTML = "Adresse email valide";
-                    textStatus.style.color = "#1bc41b";
-                    validMail = mail;
+                    textStatus.style.color = "white";
+                    validMail = tempEmail;
                 }
                 else {
 					textStatus.innerHTML = "Merci de renseigner une adresse email valide";
 					textStatus.style.color = "#ff4a4a";
 				}
-				if (mail == "") {
+				if (tempEmail == "") {
 					textStatus.innerHTML = "";
 				}
             })();
 
-            // Création de l'objet contact dans le localStorage
+            // Création de l'objet contact et ajout dans le localStorage
             let orderButton = document.getElementById("order");
-            orderButton.addEventListener("click", (e) => {e.preventDefault()});
+            orderButton.addEventListener("click", (e) => {
+                e.preventDefault();
+                if (validLastName && validFirstName && validMail && validAddress && validCity) {
+                    let contact = {
+                        firstName: validFirstName,
+                        lastName: validLastName,
+                        address: validAddress,
+                        city: validCity,
+                        email: validMail,
+                    };
+
+                    if (!contactLocalStorage) {
+                        (addContactLocalStorage = () => {
+                            contactLocalStorage = [];
+                            contactLocalStorage.push(contact);
+                            localStorage.setItem("contact", JSON.stringify(contactLocalStorage));
+                        })();
+                    }
+                    else {
+                        (modifyContactLocalStorage = () => {
+                            contactLocalStorage = contact;
+                            localStorage.setItem("contact", JSON.stringify(contactLocalStorage));
+                        })()
+                    }
+
+                    // Requête POST vers l'API
+                    let toSend = {
+                        contact,
+                        products,
+                    };
+                    const promise = fetch("http://localhost:3000/api/products/order", {
+                        method: "POST",
+                        body: JSON.stringify(toSend),
+                        headers: {
+                            "Content-type": "application/json",
+                        },
+                    });
+
+                    //Traitement de la réponse de l'API
+                    promise.then(async (response) => {
+                        try {
+                            let content = await response.json();
+                            console.log("content", content);
+                            if (response.ok && productLocalStorage) {
+                                window.location = `../html/confirmation.html?id=${content.orderId}`;
+                                localStorage.clear();
+                            }
+                            else {
+                                console.log(response.status);
+                            }
+                        }
+                        catch (error) {
+                            console.error(error);
+                        }
+                    })
+                }
+            });
         })
+        //Affichage de l'id de la commande dans la page confirmation
+        if (document.URL.includes("confirmation.html")) {
+            let orderId = new URL(window.location.href).searchParams.get("id");
+            document.querySelector("#orderId").innerHTML = orderId;
+        }
     }
     catch (error){
         console.error(error);
     }
-})()
+})();
 
 /*
 let products = [];
