@@ -1,5 +1,5 @@
 (async () => {
-    try {
+    async function fetchProduct () {
         console.log(localStorage)
         //On récupère les données de l'api pour les stocker dans le localStorage si elles n'y sont pas présentes
         if (!localStorage.getItem("inventory")){
@@ -9,6 +9,11 @@
             localStorage.setItem('inventory', JSON.stringify(inventoryRaw));
         }
         let data = await JSON.parse(localStorage.getItem("inventory"));
+        return data;
+    }
+    try {
+        let data = await fetchProduct();
+        console.log(data);   
         // Fonction qui affiche le contenu du localStorage
         (showProduct = () => {
             let items = document.getElementById("items");
@@ -22,7 +27,7 @@
                     </article>
                 </a>`;
             });
-        })()
+        })();
     }
     catch (error){
         console.error(error);
