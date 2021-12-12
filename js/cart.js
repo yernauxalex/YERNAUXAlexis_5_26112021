@@ -58,6 +58,7 @@
                         </article>`;
             })
         }
+        totalcost();
     };
 
     // Afficher le coût total et le nombre d'objet du panier
@@ -81,8 +82,10 @@
             totalPrice.innerHTML = sumPrice;
         }
         else {
-            totalQuantity.innerHTML = 0;
-            totalPrice.innerHTML = 0;
+            if (!document.URL.includes("confirmation.html")) {
+                totalQuantity.innerHTML = 0;
+                totalPrice.innerHTML = 0;
+            }
         }
         
     }
@@ -173,7 +176,6 @@
         showCart(); 
         deleteProduct();
         modifyProduct();
-        totalcost();
 
         // Gestion du formulaire de commande
         addEventListener("change", () => {
