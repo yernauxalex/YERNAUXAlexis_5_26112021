@@ -80,6 +80,10 @@
             totalQuantity.innerHTML = sumProduct;
             totalPrice.innerHTML = sumPrice;
         }
+        else {
+            totalQuantity.innerHTML = 0;
+            totalPrice.innerHTML = 0;
+        }
         
     }
 
@@ -104,8 +108,14 @@
                     tempLocalStorage.splice(indexDom, 1);
                     localStorage.setItem("product", JSON.stringify(tempLocalStorage));
                     console.log(productLocalStorage)
-                    // Suppression dans le DOM
-                    deleteItem[i].remove();
+                    productLocalStorage = JSON.parse(localStorage.getItem("product"));
+                    // Suppression du cart dans le DOM
+                    let cart = document.getElementById("cart__items");
+                    cart.innerHTML = "";
+                    // Appel des fonctions d'affichage et listeners
+                    showCart();
+                    modifyProduct();
+                    deleteProduct();
                     // Suppression de "product" dans le localStorage s'il est vide
                     if (productLocalStorage == '') {
                         console.log('suppression product dans localStorage si vide')
