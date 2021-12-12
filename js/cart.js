@@ -1,11 +1,10 @@
-//localStorage.removeItem('contact');
 (async () => {
-    async function fetchProduct () {
+    async function fetchProduct() {
         console.log(localStorage)
         //On récupère les données de l'api pour les stocker dans le localStorage si elles n'y sont pas présentes
-        if (!localStorage.getItem("inventory")){
+        if (!localStorage.getItem("inventory")) {
             console.log("Accès à l'api");
-            let response = await fetch ("http://localhost:3000/api/products");
+            let response = await fetch("http://localhost:3000/api/products");
             let inventoryRaw = await response.json();
             localStorage.setItem('inventory', JSON.stringify(inventoryRaw));
         }
@@ -14,7 +13,7 @@
     }
     // Définition des variables pour les fonctions
     let data, productLocalStorage, contactLocalStorage;
-    
+
     // Trouve l'objet correspondant à l'id dans le localStorage
     let findObject = id => {
         return data.find(data => data._id === id)
@@ -22,12 +21,12 @@
     // Affiche tout les produits présent dans le panier
     let products = [];
     let showCart = () => {
-        if (localStorage.getItem('product')){
+        if (localStorage.getItem('product')) {
             productLocalStorage.forEach((print, i) => {
                 let id = productLocalStorage[i]._id;
                 let productObject = findObject(id);
                 let price = productObject.price * parseInt(productLocalStorage[i].qty);
-                
+
                 // Stockage des id produits présent dans le panier pour la requête POST
                 let productsId = [productLocalStorage[i]._id];
                 products.push(productsId);
@@ -87,7 +86,7 @@
                 totalPrice.innerHTML = 0;
             }
         }
-        
+
     }
 
     // Supprimer un produit 
@@ -96,12 +95,12 @@
         // On stock les boutons supprimer dans un tableau
         let deleteButton = [...document.getElementsByClassName("deleteItem")];
         let deleteItem = [...document.getElementsByClassName("cart__item")];
-        
+
         // On écoute chaque bouton supprimer
         deleteButton.forEach((item, i) => {
             item.addEventListener("click", () => {
                 // On cherche l'index de l'objet en comparant sa couleur et son id
-                let indexDom = productLocalStorage.findIndex((k) => 
+                let indexDom = productLocalStorage.findIndex((k) =>
                     k.colors === deleteItem[i].dataset.color &&
                     k._id === deleteItem[i].dataset.id
                 );
@@ -157,215 +156,226 @@
                 let myItem = findObject(productLocalStorage[i]._id);
                 let price = myItem.price * parseInt(productLocalStorage[i].qty);
                 priceProduct[i].innerHTML = `${price} €`;
-                
+
                 console.log('new total price after modify qty')
                 totalcost();
             })
         })
     };
 
+    // Vérification de la validité du prénom
+    function validFirstName() {
+        let tempFirstName = document.getElementById("firstName").value;
+        let textStatus = document.getElementById("firstNameErrorMsg");
+        // Regex
+        let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
+        let number = /^[a-zA-Z\-1-9]+$/;
+
+        if (tempFirstName.match(pattern)) {
+            textStatus.innerHTML = "Prénom valide";
+            textStatus.style.color = "white";
+            return tempFirstName;
+        }
+        else {
+            if (tempFirstName.match(number)) {
+                textStatus.innerHTML = "Les chiffres ne sont pas tolérés";
+                textStatus.style.color = "#ff4a4a";
+            }
+            else {
+                textStatus.innerHTML = "Merci de renseigner un prénom valide";
+                textStatus.style.color = "#ff4a4a";
+            }
+        }
+        if (tempFirstName == "") {
+            textStatus.innerHTML = "";
+        }
+    };
+
+    // Vérification de la validité du nom
+    function validLastName() {
+        let tempLastName = document.getElementById("lastName").value;
+        let textStatus = document.getElementById("lastNameErrorMsg");
+        // Regex
+        let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
+        let number = /^[a-zA-Z\-1-9]+$/;
+
+        if (tempLastName.match(pattern)) {
+            textStatus.innerHTML = "Nom valide";
+            textStatus.style.color = "white";
+            return tempLastName;
+        }
+        else {
+            if (tempLastName.match(number)) {
+                textStatus.innerHTML = "Les chiffres ne sont pas tolérés";
+                textStatus.style.color = "#ff4a4a";
+            }
+            else {
+                textStatus.innerHTML = "Merci de renseigner un nom valide";
+                textStatus.style.color = "#ff4a4a";
+            }
+        }
+        if (tempLastName == "") {
+            textStatus.innerHTML = "";
+        }
+    };
+
+    // Vérification de la validité de l'adresse postale
+    function validAddress() {
+        let tempAddress = document.getElementById("address").value;
+        let textStatus = document.getElementById("addressErrorMsg");
+        // Regex
+        let pattern = /^[#.0-9a-z\s,-]+$/i;
+
+        if (tempAddress.match(pattern)) {
+            textStatus.innerHTML = "Adresse postale valide";
+            textStatus.style.color = "white";
+            return tempAddress;
+        }
+        else {
+            textStatus.innerHTML = "Merci de renseigner une adresse valide";
+            textStatus.style.color = "#ff4a4a";
+        }
+        if (tempAddress == "") {
+            textStatus.innerHTML = "";
+        }
+    };
+
+    // Vérification de la validité de la ville
+    function validCity() {
+        let tempCity = document.getElementById("city").value;
+        let textStatus = document.getElementById("cityErrorMsg");
+        // Regex
+        let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/i;
+
+        if (tempCity.match(pattern)) {
+            textStatus.innerHTML = "Ville valide";
+            textStatus.style.color = "white";
+            return tempCity;
+        }
+        else {
+            textStatus.innerHTML = "Merci de renseigner une ville valide";
+            textStatus.style.color = "#ff4a4a";
+        }
+        if (tempCity == "") {
+            textStatus.innerHTML = "";
+        }
+    };
+
+    // Vérification de la validité de l'email
+    function validMail() {
+        let tempEmail = document.getElementById("email").value;
+        let textStatus = document.getElementById("emailErrorMsg");
+        // Regex
+        let pattern = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i;
+
+        if (tempEmail.match(pattern)) {
+            textStatus.innerHTML = "Adresse email valide";
+            textStatus.style.color = "white";
+            return tempEmail;
+        }
+        else {
+            textStatus.innerHTML = "Merci de renseigner une adresse email valide";
+            textStatus.style.color = "#ff4a4a";
+        }
+        if (tempEmail == "") {
+            textStatus.innerHTML = "";
+        }
+    };
+
+    // Création de l'objet contact et ajout dans le localStorage
+    let createContact = () => {
+        let orderButton = document.getElementById("order");
+        orderButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (validLastName() && validFirstName() && validMail() && validAddress() && validCity()) {
+                let contact = {
+                    firstName: validFirstName(),
+                    lastName: validLastName(),
+                    address: validAddress(),
+                    city: validCity(),
+                    email: validMail(),
+                };
+
+                if (!contactLocalStorage) {
+                    (addContactLocalStorage = () => {
+                        contactLocalStorage = [];
+                        contactLocalStorage.push(contact);
+                        localStorage.setItem("contact", JSON.stringify(contactLocalStorage));
+                    })();
+                }
+                else {
+                    (modifyContactLocalStorage = () => {
+                        contactLocalStorage = contact;
+                        localStorage.setItem("contact", JSON.stringify(contactLocalStorage));
+                    })()
+                }
+
+                // Requête POST vers l'API
+                let toSend = {
+                    contact,
+                    products,
+                };
+                const promise = fetch("http://localhost:3000/api/products/order", {
+                    method: "POST",
+                    body: JSON.stringify(toSend),
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                });
+
+                //Traitement de la réponse de l'API
+                promise.then(async (response) => {
+                    try {
+                        let content = await response.json();
+                        console.log("content", content);
+                        if (response.ok && productLocalStorage) {
+                            window.location = `../html/confirmation.html?id=${content.orderId}`;
+                            localStorage.clear();
+                        }
+                        else {
+                            console.log(response.status);
+                        }
+                    }
+                    catch (error) {
+                        console.error(error);
+                    }
+                })
+            }
+        });
+    };
+
+    // Gestion du formulaire de commande
+    let validContact = () => {
+        addEventListener("change", () => {
+            validFirstName();
+            validLastName();
+            validAddress();
+            validCity();
+            validMail();
+            createContact();
+        })
+    };
+
     try {
         data = await fetchProduct();
-        console.log(data);   
+        console.log(data);
         productLocalStorage = JSON.parse(localStorage.getItem("product"));
         contactLocalStorage = JSON.parse(localStorage.getItem("contact"));
-
-        console.log(productLocalStorage);  
+        console.log(productLocalStorage);
         console.log(contactLocalStorage);
 
-        showCart(); 
+        showCart();
         deleteProduct();
         modifyProduct();
+        validContact();
 
-        // Gestion du formulaire de commande
-        addEventListener("change", () => {
-            let tempFirstName = document.getElementById("firstName").value;
-            let tempLastName = document.getElementById("lastName").value;
-            let tempAddress = document.getElementById("address").value;
-            let tempCity = document.getElementById("city").value;
-            let tempEmail = document.getElementById("email").value;
-
-            // Vérification de la validité du prénom
-            (validFirstName = () => {
-                let textStatus = document.getElementById("firstNameErrorMsg");
-                // Regex
-                let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
-                let number = /^[a-zA-Z\-1-9]+$/;
-
-                if (tempFirstName.match(pattern)) {
-					textStatus.innerHTML = "Prénom valide";
-					textStatus.style.color = "white";
-                    validFirstName = tempFirstName;
-				} 
-                else {
-					if (tempFirstName.match(number)) {
-						textStatus.innerHTML = "Les chiffres ne sont pas tolérés";
-						textStatus.style.color = "#ff4a4a";
-					} 
-                    else {
-						textStatus.innerHTML = "Merci de renseigner un prénom valide";
-						textStatus.style.color = "#ff4a4a";
-					}
-				}
-				if (tempFirstName == "") {
-					textStatus.innerHTML = "";
-				}
-            })();
-
-            // Vérification de la validité du nom
-            (validLastName = () => {
-                let textStatus = document.getElementById("lastNameErrorMsg");
-                // Regex
-                let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
-                let number = /^[a-zA-Z\-1-9]+$/;
-
-                if (tempLastName.match(pattern)) {
-					textStatus.innerHTML = "Nom valide";
-					textStatus.style.color = "white";
-                    validLastName = tempLastName;
-				} 
-                else {
-					if (tempLastName.match(number)) {
-						textStatus.innerHTML = "Les chiffres ne sont pas tolérés";
-						textStatus.style.color = "#ff4a4a";
-					} 
-                    else {
-						textStatus.innerHTML = "Merci de renseigner un nom valide";
-						textStatus.style.color = "#ff4a4a";
-					}
-				}
-				if (tempLastName == "") {
-					textStatus.innerHTML = "";
-				}
-            })();
-
-            // Vérification de la validité de l'adresse postale
-            (validAddress = () => {
-				let textStatus = document.getElementById("addressErrorMsg");
-                // Regex
-				let pattern = /^[#.0-9a-z\s,-]+$/i;
-
-				if (tempAddress.match(pattern)) {
-					textStatus.innerHTML = "Adresse postale valide";
-					textStatus.style.color = "white";
-                    validAddress = tempAddress;
-				} 
-                else {
-					textStatus.innerHTML = "Merci de renseigner une adresse valide";
-					textStatus.style.color = "#ff4a4a";
-				}
-				if (tempAddress == "") {
-					textStatus.innerHTML = "";
-				}
-            })();
-
-            // Vérification de la validité de la ville
-            (validCity = () => {
-                let textStatus = document.getElementById("cityErrorMsg");
-                // Regex
-                let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/i;
-                
-                if (tempCity.match(pattern)) {
-                    textStatus.innerHTML = "Ville valide";
-                    textStatus.style.color = "white";
-                    validCity = tempCity;
-                }
-                else {
-					textStatus.innerHTML = "Merci de renseigner une ville valide";
-					textStatus.style.color = "#ff4a4a";
-				}
-				if (tempCity == "") {
-					textStatus.innerHTML = "";
-				}
-            })();
-
-            // Vérification de la validité de l'email
-            (validMail = () => {
-                let textStatus = document.getElementById("emailErrorMsg");
-                // Regex
-                let pattern = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i;
-
-                if (tempEmail.match(pattern)) {
-                    textStatus.innerHTML = "Adresse email valide";
-                    textStatus.style.color = "white";
-                    validMail = tempEmail;
-                }
-                else {
-					textStatus.innerHTML = "Merci de renseigner une adresse email valide";
-					textStatus.style.color = "#ff4a4a";
-				}
-				if (tempEmail == "") {
-					textStatus.innerHTML = "";
-				}
-            })();
-
-            // Création de l'objet contact et ajout dans le localStorage
-            let orderButton = document.getElementById("order");
-            orderButton.addEventListener("click", (e) => {
-                e.preventDefault();
-                if (validLastName && validFirstName && validMail && validAddress && validCity) {
-                    let contact = {
-                        firstName: validFirstName,
-                        lastName: validLastName,
-                        address: validAddress,
-                        city: validCity,
-                        email: validMail,
-                    };
-
-                    if (!contactLocalStorage) {
-                        (addContactLocalStorage = () => {
-                            contactLocalStorage = [];
-                            contactLocalStorage.push(contact);
-                            localStorage.setItem("contact", JSON.stringify(contactLocalStorage));
-                        })();
-                    }
-                    else {
-                        (modifyContactLocalStorage = () => {
-                            contactLocalStorage = contact;
-                            localStorage.setItem("contact", JSON.stringify(contactLocalStorage));
-                        })()
-                    }
-
-                    // Requête POST vers l'API
-                    let toSend = {
-                        contact,
-                        products,
-                    };
-                    const promise = fetch("http://localhost:3000/api/products/order", {
-                        method: "POST",
-                        body: JSON.stringify(toSend),
-                        headers: {
-                            "Content-type": "application/json",
-                        },
-                    });
-
-                    //Traitement de la réponse de l'API
-                    promise.then(async (response) => {
-                        try {
-                            let content = await response.json();
-                            console.log("content", content);
-                            if (response.ok && productLocalStorage) {
-                                window.location = `../html/confirmation.html?id=${content.orderId}`;
-                                localStorage.clear();
-                            }
-                            else {
-                                console.log(response.status);
-                            }
-                        }
-                        catch (error) {
-                            console.error(error);
-                        }
-                    })
-                }
-            });
-        })
         //Affichage de l'id de la commande dans la page confirmation
         if (document.URL.includes("confirmation.html")) {
             let orderId = new URL(window.location.href).searchParams.get("id");
             document.getElementById("orderId").innerHTML = orderId;
         }
     }
-    catch (error){
+    catch (error) {
         console.error(error);
     }
 })();
