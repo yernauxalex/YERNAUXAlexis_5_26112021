@@ -19,7 +19,6 @@
         let addProductLocalStorage = () => {
             saveProductLocalStorage.push(productJson);
             localStorage.setItem('product', JSON.stringify(saveProductLocalStorage));
-            console.log("Ajout dans le localStorage");
         }
 
         // Modifier un produit dans le localStorage
@@ -36,7 +35,6 @@
             else {
                 saveProductLocalStorage[index].qty += productJson.qty;
                 localStorage.setItem('product', JSON.stringify(saveProductLocalStorage));
-                console.log("Ajout de la quantité")
             }
         }
 
@@ -49,7 +47,6 @@
             if (!saveProductLocalStorage) {
                 saveProductLocalStorage = [];
                 addProductLocalStorage();
-                console.log("Création d'un produit");
             }
 
             // Vérification si le produit avec la même couleur est déjà présent
@@ -60,22 +57,17 @@
                 // Si déjà présent on modifie la quantité
                 if (index !== -1) {
                     modifyProductLocalStorage(index);
-                    console.log("Déjà présent, quantité modifiée");
                 }
                 // Sinon ajout du produit
                 else {
                     addProductLocalStorage();
-                    console.log("Ajout du produit");
                 }
             }
         }
-        console.log("Current saveProductLocalStorage");
-        console.log(saveProductLocalStorage);
     }
 
     try {
         let data = await fetchProduct();
-        console.log(data);
         (displayproduct = () => {
             // Récupération de l'id dans l'url de la page
             let idProduct = new URL(window.location.href).searchParams.get('id')

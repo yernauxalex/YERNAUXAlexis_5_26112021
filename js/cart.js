@@ -108,12 +108,10 @@
                     deleteProduct();
                     // Suppression de "product" dans le localStorage s'il est vide
                     if (productLocalStorage == '') {
-                        console.log('suppression product dans localStorage si vide')
                         localStorage.removeItem("product");
                         products = [];
                     }
                 }
-                console.log('new total price after delete item')
                 totalcost();
             })
         })
@@ -124,7 +122,6 @@
         // On stock les inputs à modifier pour la modification de quantité
         let inputContainer = [...document.getElementsByClassName("itemQuantity")];
         // On écoute chaque champ input
-        // verif new id 
         inputContainer.forEach((item, i) => {
             item.addEventListener("change", () => {
                 console.log(inputContainer)
@@ -137,15 +134,12 @@
                 else {
                     productLocalStorage[i].qty = inputContainer[i].value;
                     localStorage.setItem("product", JSON.stringify(productLocalStorage));
-                    console.log(productLocalStorage)
                 }
                 // Calcul du nouveau prix
                 let priceProduct = document.getElementsByClassName("priceProduct");
                 let myItem = findObject(productLocalStorage[i]._id);
                 let price = myItem.price * parseInt(productLocalStorage[i].qty);
                 priceProduct[i].innerHTML = `${price} €`;
-
-                console.log('new total price after modify qty')
                 totalcost();
             })
         })

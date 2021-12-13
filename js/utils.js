@@ -8,5 +8,5 @@ async function fetchProduct() {
         localStorage.setItem('inventory', JSON.stringify(inventoryRaw));
     }
     let data = await JSON.parse(localStorage.getItem("inventory"));
-    return data;  
+    return data;
 };
