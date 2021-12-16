@@ -3,7 +3,7 @@
     let data;
     // Fonction qui affiche le contenu du localStorage
     showProduct = () => {
-        let items = document.getElementById("items");
+        const items = document.getElementById("items");
         data.forEach((print) => {
             items.innerHTML += `
             <a href="./product.html?id=${print._id}">
