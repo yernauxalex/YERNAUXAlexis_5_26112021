@@ -3,7 +3,7 @@
     let data, productLocalStorage, contactLocalStorage;
 
     // Trouve l'objet correspondant à l'id dans le localStorage
-    let findObject = id => {
+    const findObject = id => {
         return data.find(data => data._id === id)
     }
     // Affiche tout les produits présent dans le panier
@@ -11,16 +11,16 @@
     let showCart = () => {
         if (localStorage.getItem('product')) {
             productLocalStorage.forEach((print, i) => {
-                let id = productLocalStorage[i]._id;
-                let productObject = findObject(id);
-                let price = productObject.price * parseInt(productLocalStorage[i].qty);
+                const id = productLocalStorage[i]._id;
+                const productObject = findObject(id);
+                const price = productObject.price * parseInt(productLocalStorage[i].qty);
 
                 // Stockage des id produits présent dans le panier pour la requête POST
-                let productsId = [productLocalStorage[i]._id];
+                const productsId = [productLocalStorage[i]._id];
                 products.push(productsId);
 
                 // Insertion dans la page 
-                let cart = document.getElementById("cart__items");
+                const cart = document.getElementById("cart__items");
                 cart.innerHTML += `
                         <article class="cart__item" data-id="${productLocalStorage[i]._id}" data-color="${productLocalStorage[i].colors}">
                             <div class="cart__item__img">
@@ -52,17 +52,17 @@
     let totalcost = () => {
         let sumProduct = 0;
         let sumPrice = 0;
-        let totalQuantity = document.getElementById('totalQuantity');
-        let totalPrice = document.getElementById('totalPrice');
+        const totalQuantity = document.getElementById('totalQuantity');
+        const totalPrice = document.getElementById('totalPrice');
 
         if (localStorage.getItem('product')) {
             productLocalStorage.forEach((item, k) => {
-                let myItemTotal = findObject(productLocalStorage[k]._id);
+                const myItemTotal = findObject(productLocalStorage[k]._id);
 
-                let tempQuantity = parseInt(productLocalStorage[k].qty);
+                const tempQuantity = parseInt(productLocalStorage[k].qty);
                 sumProduct += tempQuantity;
 
-                let tempPrice = parseInt(myItemTotal.price);
+                const tempPrice = parseInt(myItemTotal.price);
                 sumPrice += tempPrice * tempQuantity;
             })
             totalQuantity.innerHTML = sumProduct;
@@ -119,7 +119,7 @@
     // Modifier la quantité d'un produit
     let modifyProduct = () => {
         // On stock les inputs à modifier pour la modification de quantité
-        let inputContainer = [...document.getElementsByClassName("itemQuantity")];
+        const inputContainer = [...document.getElementsByClassName("itemQuantity")];
         // On écoute chaque champ input
         inputContainer.forEach((item, i) => {
             item.addEventListener("change", () => {
@@ -134,9 +134,9 @@
                     localStorage.setItem("product", JSON.stringify(productLocalStorage));
                 }
                 // Calcul du nouveau prix
-                let priceProduct = document.getElementsByClassName("priceProduct");
-                let myItem = findObject(productLocalStorage[i]._id);
-                let price = myItem.price * parseInt(productLocalStorage[i].qty);
+                const priceProduct = document.getElementsByClassName("priceProduct");
+                const myItem = findObject(productLocalStorage[i]._id);
+                const price = myItem.price * parseInt(productLocalStorage[i].qty);
                 priceProduct[i].innerHTML = `${price} €`;
                 totalcost();
             })
@@ -145,11 +145,11 @@
 
     // Vérification de la validité du prénom
     function validFirstName() {
-        let tempFirstName = document.getElementById("firstName").value;
-        let textStatus = document.getElementById("firstNameErrorMsg");
+        const tempFirstName = document.getElementById("firstName").value;
+        const textStatus = document.getElementById("firstNameErrorMsg");
         // Regex
-        let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
-        let number = /^[a-zA-Z\-1-9]+$/;
+        const pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
+        const number = /^[a-zA-Z\-1-9]+$/;
 
         if (tempFirstName.match(pattern)) {
             textStatus.innerHTML = "Prénom valide";
@@ -173,11 +173,11 @@
 
     // Vérification de la validité du nom
     function validLastName() {
-        let tempLastName = document.getElementById("lastName").value;
-        let textStatus = document.getElementById("lastNameErrorMsg");
+        const tempLastName = document.getElementById("lastName").value;
+        const textStatus = document.getElementById("lastNameErrorMsg");
         // Regex
-        let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
-        let number = /^[a-zA-Z\-1-9]+$/;
+        const pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
+        const number = /^[a-zA-Z\-1-9]+$/;
 
         if (tempLastName.match(pattern)) {
             textStatus.innerHTML = "Nom valide";
@@ -201,10 +201,10 @@
 
     // Vérification de la validité de l'adresse postale
     function validAddress() {
-        let tempAddress = document.getElementById("address").value;
-        let textStatus = document.getElementById("addressErrorMsg");
+        const tempAddress = document.getElementById("address").value;
+        const textStatus = document.getElementById("addressErrorMsg");
         // Regex
-        let pattern = /^[#.0-9a-z\s,-]+$/i;
+        const pattern = /^[#.0-9a-z\s,-]+$/i;
 
         if (tempAddress.match(pattern)) {
             textStatus.innerHTML = "Adresse postale valide";
@@ -222,10 +222,10 @@
 
     // Vérification de la validité de la ville
     function validCity() {
-        let tempCity = document.getElementById("city").value;
-        let textStatus = document.getElementById("cityErrorMsg");
+        const tempCity = document.getElementById("city").value;
+        const textStatus = document.getElementById("cityErrorMsg");
         // Regex
-        let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/i;
+        const pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/i;
 
         if (tempCity.match(pattern)) {
             textStatus.innerHTML = "Ville valide";
@@ -243,10 +243,10 @@
 
     // Vérification de la validité de l'email
     function validMail() {
-        let tempEmail = document.getElementById("email").value;
-        let textStatus = document.getElementById("emailErrorMsg");
+        const tempEmail = document.getElementById("email").value;
+        const textStatus = document.getElementById("emailErrorMsg");
         // Regex
-        let pattern = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i;
+        const pattern = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i;
 
         if (tempEmail.match(pattern)) {
             textStatus.innerHTML = "Adresse email valide";
@@ -264,11 +264,11 @@
 
     // Création de l'objet contact et ajout dans le localStorage
     let createContact = () => {
-        let orderButton = document.getElementById("order");
+        const orderButton = document.getElementById("order");
         orderButton.addEventListener("click", (e) => {
             e.preventDefault();
             if (validLastName() && validFirstName() && validMail() && validAddress() && validCity()) {
-                let contact = {
+                const contact = {
                     firstName: validFirstName(),
                     lastName: validLastName(),
                     address: validAddress(),
@@ -291,7 +291,7 @@
                 }
 
                 // Requête POST vers l'API
-                let toSend = {
+                const toSend = {
                     contact,
                     products,
                 };
@@ -306,7 +306,7 @@
                 //Traitement de la réponse de l'API
                 promise.then(async (response) => {
                     try {
-                        let content = await response.json();
+                        const content = await response.json();
                         if (response.ok && productLocalStorage) {
                             window.location = `../html/confirmation.html?id=${content.orderId}`;
                             localStorage.clear();
@@ -347,7 +347,7 @@
 
         //Affichage de l'id de la commande dans la page confirmation
         if (document.URL.includes("confirmation.html")) {
-            let orderId = new URL(window.location.href).searchParams.get("id");
+            const orderId = new URL(window.location.href).searchParams.get("id");
             document.getElementById("orderId").innerHTML = orderId;
         }
     }
