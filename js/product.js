@@ -45,7 +45,6 @@
 
         // Si quantité inférieure ou égale à 0, ou supérieur à 100, ou absence de couleur alors l'ajout est impossible
         if (productJson.qty <= 0 || productJson.qty > 100 || productJson.colors == '') {
-            console.log('Ajout impossible');
             alert("Ajout au panier impossible");
         }
         else {

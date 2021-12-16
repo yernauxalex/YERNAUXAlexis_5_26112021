@@ -97,7 +97,6 @@
                     // Suppression dans le localStorage
                     tempLocalStorage.splice(indexDom, 1);
                     localStorage.setItem("product", JSON.stringify(tempLocalStorage));
-                    console.log(productLocalStorage)
                     productLocalStorage = JSON.parse(localStorage.getItem("product"));
                     // Suppression du cart dans le DOM
                     let cart = document.getElementById("cart__items");
@@ -124,12 +123,11 @@
         // On écoute chaque champ input
         inputContainer.forEach((item, i) => {
             item.addEventListener("change", () => {
-                console.log(inputContainer)
                 productLocalStorage = JSON.parse(localStorage.getItem("product"));
                 // On modifie la quantité dans le localStorage et le DOM
                 if (inputContainer[i].value > 100) {
                     inputContainer[i].value = 100;
-                    console.log("Quantité maximale atteinte");
+                    alert("Ajout au panier impossible quantité maximale atteinte");
                 }
                 else {
                     productLocalStorage[i].qty = inputContainer[i].value;
@@ -309,7 +307,6 @@
                 promise.then(async (response) => {
                     try {
                         let content = await response.json();
-                        console.log("content", content);
                         if (response.ok && productLocalStorage) {
                             window.location = `../html/confirmation.html?id=${content.orderId}`;
                             localStorage.clear();
@@ -340,11 +337,8 @@
 
     try {
         data = await fetchProduct();
-        console.log(data);
         productLocalStorage = JSON.parse(localStorage.getItem("product"));
         contactLocalStorage = JSON.parse(localStorage.getItem("contact"));
-        console.log(productLocalStorage);
-        console.log(contactLocalStorage);
 
         showCart();
         deleteProduct();
