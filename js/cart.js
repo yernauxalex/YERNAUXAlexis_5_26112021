@@ -10,32 +10,32 @@
     let products = [];
     let showCart = () => {
         if (localStorage.getItem('product')) {
-            productLocalStorage.forEach((print, i) => {
-                const id = productLocalStorage[i]._id;
+            productLocalStorage.forEach((print) => {
+                const id = print._id;
                 const productObject = findObject(id);
-                const price = productObject.price * parseInt(productLocalStorage[i].qty);
+                const price = productObject.price * parseInt(print.qty);
 
                 // Stockage des id produits présent dans le panier pour la requête POST
-                const productsId = [productLocalStorage[i]._id];
+                const productsId = [print._id];
                 products.push(productsId);
 
                 // Insertion dans la page 
                 const cart = document.getElementById("cart__items");
                 cart.innerHTML += `
-                        <article class="cart__item" data-id="${productLocalStorage[i]._id}" data-color="${productLocalStorage[i].colors}">
+                        <article class="cart__item" data-id="${print._id}" data-color="${print.colors}">
                             <div class="cart__item__img">
                                 <img src="${productObject.imageUrl}" alt="${productObject.altTxt}">
                             </div>
                             <div class="cart__item__content">
                                 <div class="cart__item__content__description">
                                     <h2>${productObject.name}</h2>
-                                    <p>${productLocalStorage[i].colors}</p>
+                                    <p>${print.colors}</p>
                                     <p class="priceProduct">${price}€</p>
                                 </div>
                                 <div class="cart__item__content__settings">
                                     <div class="cart__item__content__settings__quantity">
                                         <p>Qté : </p>
-                                        <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${productLocalStorage[i].qty}">
+                                        <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${print.qty}">
                                     </div>
                                     <div class="cart__item__content__settings__delete">
                                     <p class="deleteItem">Supprimer</p>
@@ -56,10 +56,10 @@
         const totalPrice = document.getElementById('totalPrice');
 
         if (localStorage.getItem('product')) {
-            productLocalStorage.forEach((item, k) => {
-                const myItemTotal = findObject(productLocalStorage[k]._id);
+            productLocalStorage.forEach((item) => {
+                const myItemTotal = findObject(item._id);
 
-                const tempQuantity = parseInt(productLocalStorage[k].qty);
+                const tempQuantity = parseInt(item.qty);
                 sumProduct += tempQuantity;
 
                 const tempPrice = parseInt(myItemTotal.price);
@@ -125,12 +125,12 @@
             item.addEventListener("change", () => {
                 productLocalStorage = JSON.parse(localStorage.getItem("product"));
                 // On modifie la quantité dans le localStorage et le DOM
-                if (inputContainer[i].value > 100) {
-                    inputContainer[i].value = 100;
+                if (item.value > 100) {
+                    item.value = 100;
                     alert("Ajout au panier impossible quantité maximale atteinte");
                 }
                 else {
-                    productLocalStorage[i].qty = inputContainer[i].value;
+                    productLocalStorage[i].qty = item.value;
                     localStorage.setItem("product", JSON.stringify(productLocalStorage));
                 }
                 // Calcul du nouveau prix
