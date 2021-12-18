@@ -1,8 +1,6 @@
 (async () => {
-    // Définition de variable pour la fonction
-    let data;
     // Fonction qui affiche le contenu du localStorage
-    showProduct = () => {
+    showProduct = (data) => {
         const items = document.getElementById("items");
         data.forEach((print) => {
             items.innerHTML += `
@@ -16,8 +14,8 @@
         });
     };
     try {
-        data = await fetchProduct();
-        showProduct();
+        let data = await fetchProduct();
+        showProduct(data);
     }
     catch (error) {
         console.error(error);
