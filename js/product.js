@@ -19,13 +19,12 @@
         const totalProduct = productJson.qty + saveProductLocalStorage[index].qty;
 
         if (totalProduct > 100) {
-            alert("Limité à 100 exemplaires");
+            return alert("Limité à 100 exemplaires");
         }
-        else {
-            saveProductLocalStorage[index].qty += productJson.qty;
-            localStorage.setItem('product', JSON.stringify(saveProductLocalStorage));
-            alert("Ajout du produit au panier");
-        }
+        // On ajoute le nombre d'exemplaire au localStorage
+        saveProductLocalStorage[index].qty += productJson.qty;
+        localStorage.setItem('product', JSON.stringify(saveProductLocalStorage));
+        alert("Ajout du produit au panier");
     }    
 
     // Création d'un produit
@@ -45,30 +44,25 @@
 
         // Si quantité inférieure ou égale à 0, ou supérieur à 100, ou absence de couleur alors l'ajout est impossible
         if (productJson.qty <= 0 || productJson.qty > 100 || productJson.colors == '') {
-            alert("Ajout au panier impossible");
+            return alert("Ajout au panier impossible");
         }
-        else {
-            // Si pas de produit dans le localStorage création d'un produit et ajout dans le localStorage
-            if (!saveProductLocalStorage) {
-                saveProductLocalStorage = [];
-                addProductLocalStorage();
-            }
-
-            // Vérification si le produit avec la même couleur est déjà présent
-            else {
-                const sameColorId = (s) => s.colors === productJson.colors && s._id === productJson._id;
-                const index = saveProductLocalStorage.findIndex(sameColorId)
-
-                // Si déjà présent on modifie la quantité
-                if (index !== -1) {
-                    modifyProductLocalStorage(index);
-                }
-                // Sinon ajout du produit
-                else {
-                    addProductLocalStorage();
-                }
-            }
+        // Si pas de produit dans le localStorage création d'un produit et ajout dans le localStorage
+        if (!saveProductLocalStorage) {
+            saveProductLocalStorage = [];
+            return addProductLocalStorage();
         }
+
+        // Vérification si le produit avec la même couleur est déjà présent
+        const sameColorId = (s) => s.colors === productJson.colors && s._id === productJson._id;
+        const index = saveProductLocalStorage.findIndex(sameColorId)
+
+        // Si déjà présent on modifie la quantité
+        if (index !== -1) {
+            return modifyProductLocalStorage(index);
+        }
+        // Sinon ajout du produit
+        console.log("last condition")
+        addProductLocalStorage();
     }
 
     // Fonction qui affiche le contenu du panier
