@@ -269,22 +269,18 @@
                     firstName: validFirstName(),
                     lastName: validLastName(),
                     address: validAddress(),
-                    city: validCity(),
+                    city: validCity(),                                                                                              
                     email: validMail(),
                 };
 
                 if (!contactLocalStorage) {
-                    (addContactLocalStorage = () => {
-                        contactLocalStorage = [];
-                        contactLocalStorage.push(contact);
-                        localStorage.setItem("contact", JSON.stringify(contactLocalStorage));
-                    })();
+                    contactLocalStorage = [];
+                    contactLocalStorage.push(contact);
+                    localStorage.setItem("contact", JSON.stringify(contactLocalStorage));
                 }
                 else {
-                    (modifyContactLocalStorage = () => {
-                        contactLocalStorage = contact;
-                        localStorage.setItem("contact", JSON.stringify(contactLocalStorage));
-                    })()
+                    contactLocalStorage = contact;
+                    localStorage.setItem("contact", JSON.stringify(contactLocalStorage));
                 }
 
                 // Requête POST vers l'API
@@ -335,12 +331,13 @@
     try {
         let data = await fetchProduct();
         let productLocalStorage = JSON.parse(localStorage.getItem("product"));
-        contactLocalStorage = JSON.parse(localStorage.getItem("contact"));
+        let contactLocalStorage = JSON.parse(localStorage.getItem("contact"));
 
         showCart(data, productLocalStorage);
         deleteProduct(data,productLocalStorage);
         modifyProduct(data,productLocalStorage);
         validContact(productLocalStorage, contactLocalStorage);
+        
 
         //Affichage de l'id de la commande dans la page confirmation
         if (document.URL.includes("confirmation.html")) {
