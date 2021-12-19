@@ -4,8 +4,7 @@
         return data.find(data => data._id === id)
     }
     // Affiche tout les produits présent dans le panier
-    let products = [];
-    let showCart = (data, productLocalStorage) => {
+    let showCart = (data, productLocalStorage, products) => {
         if (localStorage.getItem('product')) {
             productLocalStorage.forEach((print) => {
                 const id = print._id;
@@ -75,7 +74,7 @@
     }
 
     // Supprimer un produit 
-    let deleteProduct = (data, productLocalStorage) => {
+    let deleteProduct = (data, productLocalStorage, products) => {
         let tempLocalStorage = productLocalStorage;
         // On stock les boutons supprimer dans un tableau
         let deleteButton = [...document.getElementsByClassName("deleteItem")];
@@ -99,9 +98,9 @@
                     let cart = document.getElementById("cart__items");
                     cart.innerHTML = "";
                     // Appel des fonctions d'affichage et listeners
-                    showCart(data, productLocalStorage);
+                    showCart(data, productLocalStorage, products);
                     modifyProduct(data, productLocalStorage);
-                    deleteProduct(data, productLocalStorage);
+                    deleteProduct(data, productLocalStorage, products);
                     // Suppression de "product" dans le localStorage s'il est vide
                     if (productLocalStorage == '') {
                         localStorage.removeItem("product");
@@ -259,64 +258,72 @@
         }
     };
 
-    // Création de l'objet contact et ajout dans le localStorage
-    let createContact = (productLocalStorage, contactLocalStorage) => {
-        const orderButton = document.getElementById("order");
-        orderButton.addEventListener("click", (e) => {
-            e.preventDefault();
-            if (validLastName() && validFirstName() && validMail() && validAddress() && validCity()) {
-                const contact = {
-                    firstName: validFirstName(),
-                    lastName: validLastName(),
-                    address: validAddress(),
-                    city: validCity(),                                                                                              
-                    email: validMail(),
-                };
+    // Création de l'objet contact 
+    let createContact = () => {
+        if (validLastName() && validFirstName() && validMail() && validAddress() && validCity()) {
+            const contact = {
+                firstName: validFirstName(),
+                lastName: validLastName(),
+                address: validAddress(),
+                city: validCity(),
+                email: validMail(),
+            };
+            return contact;
+        }
+    };
 
-                if (!contactLocalStorage) {
-                    contactLocalStorage = [];
-                    contactLocalStorage.push(contact);
-                    localStorage.setItem("contact", JSON.stringify(contactLocalStorage));
-                }
-                else {
-                    contactLocalStorage = contact;
-                    localStorage.setItem("contact", JSON.stringify(contactLocalStorage));
-                }
+    // Ajout du contact dans le localStorage
+    let addContactLocalStorage = (contactLocalStorage, contact) => {
+        if (!contactLocalStorage) {
+            contactLocalStorage = [];
+            contactLocalStorage.push(contact);
+            localStorage.setItem("contact", JSON.stringify(contactLocalStorage));
+            return contactLocalStorage;
+        }
+        contactLocalStorage = contact;
+        localStorage.setItem("contact", JSON.stringify(contactLocalStorage));
+        return contactLocalStorage;
+    };
 
-                // Requête POST vers l'API
-                const toSend = {
-                    contact,
-                    products,
-                };
-                const promise = fetch("http://localhost:3000/api/products/order", {
-                    method: "POST",
-                    body: JSON.stringify(toSend),
-                    headers: {
-                        "Content-type": "application/json",
-                    },
-                });
-
-                //Traitement de la réponse de l'API
-                promise.then(async (response) => {
-                    try {
-                        const content = await response.json();
-                        if (response.ok && productLocalStorage) {
-                            window.location = `../html/confirmation.html?id=${content.orderId}`;
-                            localStorage.clear();
-                        }
-                        else {
-                            console.log(response.status);
-                        }
-                    }
-                    catch (error) {
-                        console.error(error);
-                    }
-                })
-            }
+    // Requête POST vers l'API
+    async function postApi(contact, products, productLocalStorage) {
+        const toSend = {
+            contact,
+            products,
+        };
+        const response = await fetch("http://localhost:3000/api/products/order", {
+            method: "POST",
+            body: JSON.stringify(toSend),
+            headers: {
+                "Content-type": "application/json",
+            },
         });
+
+        // Traitement de la réponse de l'API
+        const content = await response.json();
+        if (response.ok && productLocalStorage) {
+            window.location = `../html/confirmation.html?id=${content.orderId}`;
+            localStorage.clear();
+        }
+        else {
+            console.log(response.status);
+        }
     };
 
     // Gestion du formulaire de commande
+    let validButton = (productLocalStorage, contactLocalStorage, products) => {
+        addEventListener("change", () => {
+            const orderButton = document.getElementById("order");
+            orderButton.addEventListener("click", (e) => {
+                e.preventDefault();
+                let contact = createContact();
+                addContactLocalStorage(contactLocalStorage, contact);
+                postApi(contact, products, productLocalStorage);
+            })
+        })
+    };
+
+    // Vérification de la validité des informations du formulaire
     let validContact = (productLocalStorage, contactLocalStorage) => {
         addEventListener("change", () => {
             validFirstName();
@@ -329,15 +336,17 @@
     };
 
     try {
-        let data = await fetchProduct();
-        let productLocalStorage = JSON.parse(localStorage.getItem("product"));
-        let contactLocalStorage = JSON.parse(localStorage.getItem("contact"));
+        const data = await fetchProduct();
+        const products = [];
+        const productLocalStorage = JSON.parse(localStorage.getItem("product"));
+        const contactLocalStorage = JSON.parse(localStorage.getItem("contact"));
 
-        showCart(data, productLocalStorage);
-        deleteProduct(data,productLocalStorage);
-        modifyProduct(data,productLocalStorage);
+        showCart(data, productLocalStorage, products);
+        deleteProduct(data, productLocalStorage, products);
+        modifyProduct(data, productLocalStorage);
         validContact(productLocalStorage, contactLocalStorage);
-        
+        validButton(productLocalStorage, contactLocalStorage, products);
+
 
         //Affichage de l'id de la commande dans la page confirmation
         if (document.URL.includes("confirmation.html")) {
