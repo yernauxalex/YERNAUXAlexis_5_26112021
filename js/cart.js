@@ -1,18 +1,15 @@
 (async () => {
-    // Définition des variables pour les fonctions
-    let data, productLocalStorage, contactLocalStorage;
-
     // Trouve l'objet correspondant à l'id dans le localStorage
-    const findObject = id => {
+    const findObject = (id, data) => {
         return data.find(data => data._id === id)
     }
     // Affiche tout les produits présent dans le panier
     let products = [];
-    let showCart = () => {
+    let showCart = (data, productLocalStorage) => {
         if (localStorage.getItem('product')) {
             productLocalStorage.forEach((print) => {
                 const id = print._id;
-                const productObject = findObject(id);
+                const productObject = findObject(id, data);
                 const price = productObject.price * parseInt(print.qty);
 
                 // Stockage des id produits présent dans le panier pour la requête POST
@@ -45,11 +42,11 @@
                         </article>`;
             })
         }
-        totalcost();
+        totalcost(data, productLocalStorage);
     };
 
     // Afficher le coût total et le nombre d'objet du panier
-    let totalcost = () => {
+    let totalcost = (data, productLocalStorage) => {
         let sumProduct = 0;
         let sumPrice = 0;
         const totalQuantity = document.getElementById('totalQuantity');
@@ -57,7 +54,7 @@
 
         if (localStorage.getItem('product')) {
             productLocalStorage.forEach((item) => {
-                const myItemTotal = findObject(item._id);
+                const myItemTotal = findObject(item._id, data);
 
                 const tempQuantity = parseInt(item.qty);
                 sumProduct += tempQuantity;
@@ -78,7 +75,7 @@
     }
 
     // Supprimer un produit 
-    let deleteProduct = () => {
+    let deleteProduct = (data, productLocalStorage) => {
         let tempLocalStorage = productLocalStorage;
         // On stock les boutons supprimer dans un tableau
         let deleteButton = [...document.getElementsByClassName("deleteItem")];
@@ -102,22 +99,22 @@
                     let cart = document.getElementById("cart__items");
                     cart.innerHTML = "";
                     // Appel des fonctions d'affichage et listeners
-                    showCart();
-                    modifyProduct();
-                    deleteProduct();
+                    showCart(data, productLocalStorage);
+                    modifyProduct(data, productLocalStorage);
+                    deleteProduct(data, productLocalStorage);
                     // Suppression de "product" dans le localStorage s'il est vide
                     if (productLocalStorage == '') {
                         localStorage.removeItem("product");
                         products = [];
                     }
                 }
-                totalcost();
+                totalcost(data, productLocalStorage);
             })
         })
     };
 
     // Modifier la quantité d'un produit
-    let modifyProduct = () => {
+    let modifyProduct = (data, productLocalStorage) => {
         // On stock les inputs à modifier pour la modification de quantité
         const inputContainer = [...document.getElementsByClassName("itemQuantity")];
         // On écoute chaque champ input
@@ -135,10 +132,10 @@
                 }
                 // Calcul du nouveau prix
                 const priceProduct = document.getElementsByClassName("priceProduct");
-                const myItem = findObject(productLocalStorage[i]._id);
+                const myItem = findObject(productLocalStorage[i]._id, data);
                 const price = myItem.price * parseInt(productLocalStorage[i].qty);
                 priceProduct[i].innerHTML = `${price} €`;
-                totalcost();
+                totalcost(data, productLocalStorage);
             })
         })
     };
@@ -263,7 +260,7 @@
     };
 
     // Création de l'objet contact et ajout dans le localStorage
-    let createContact = () => {
+    let createContact = (productLocalStorage, contactLocalStorage) => {
         const orderButton = document.getElementById("order");
         orderButton.addEventListener("click", (e) => {
             e.preventDefault();
@@ -324,26 +321,26 @@
     };
 
     // Gestion du formulaire de commande
-    let validContact = () => {
+    let validContact = (productLocalStorage, contactLocalStorage) => {
         addEventListener("change", () => {
             validFirstName();
             validLastName();
             validAddress();
             validCity();
             validMail();
-            createContact();
+            createContact(productLocalStorage, contactLocalStorage);
         })
     };
 
     try {
-        data = await fetchProduct();
-        productLocalStorage = JSON.parse(localStorage.getItem("product"));
+        let data = await fetchProduct();
+        let productLocalStorage = JSON.parse(localStorage.getItem("product"));
         contactLocalStorage = JSON.parse(localStorage.getItem("contact"));
 
-        showCart();
-        deleteProduct();
-        modifyProduct();
-        validContact();
+        showCart(data, productLocalStorage);
+        deleteProduct(data,productLocalStorage);
+        modifyProduct(data,productLocalStorage);
+        validContact(productLocalStorage, contactLocalStorage);
 
         //Affichage de l'id de la commande dans la page confirmation
         if (document.URL.includes("confirmation.html")) {
