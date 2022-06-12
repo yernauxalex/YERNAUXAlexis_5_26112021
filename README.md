@@ -10,3 +10,5 @@ Votre client est Kanap, une marque de canapés qui vend ses produits depuis sa b
 https://github.com/OpenClassrooms-Student-Center/P5-Dev-Web-Kanap
 
    [Javascript]: <https://www.javascript.com/>
+
+[//]: # (order for gitfolio)
